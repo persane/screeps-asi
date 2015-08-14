@@ -2,9 +2,15 @@ var lib = require('lib');
 var creeps = require('creeps');
 var ai = require('ai');
 
-if(Game.time % 10 === 0) {
-   ai.tick();
-}
+ai.tick();
+
+/**
+ * TODO:
+ * 
+ * - set units without a task into sleep mode
+ * - cable: pickup energy from below, when arriving at new location (old energy from dead creep)
+ * - new unit: capacitor for long cables
+ */
 
 for(var name in Game.creeps) {
 	var creep = Game.creeps[name];
@@ -20,12 +26,28 @@ for(var name in Game.creeps) {
 	    creeps.builder(creep);
 	}
 	
-	else if(creep.memory.role == 'guard') {
-    	var targets = creep.room.find(FIND_HOSTILE_CREEPS);
-    	if(targets.length) {
-    		creep.moveTo(targets[0]);
-    		creep.attack(targets[0]);
-    	}
+	else if(creep.memory.task == 'defender') {
+		creeps.defender(creep);    	
+    }
+	
+	else if(creep.memory.task == 'mining') {
+		creeps.mining(creep);    	
+    }
+	
+	else if(creep.memory.task == 'store') {
+		creeps.store(creep);    	
+    }
+	
+	else if(creep.memory.task == 'truck') {
+		creeps.truck(creep);    	
+    }
+	
+	else if(creep.memory.task == 'cable') {
+		creeps.cable(creep);    	
+    }
+	
+	else if(creep.memory.task == 'plug') {
+		creeps.plug(creep);    	
     }
 	
 }
